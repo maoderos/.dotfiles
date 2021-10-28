@@ -13,6 +13,10 @@ alias buildO2="aliBuild build O2 --defaults o2 -j5"
 alias enterO2="alienv enter O2/latest-dev-o2"
 alias enterO2Alpide="alienv enter O2/latest-ALPIDE-IBA-o2"
 
+# in case of using alidocklite (docker) for O2:
+
+alias alidocklite="/home/marcosderos/alice/alidocklite/alidocklite"
+
 # SRIM
 
 SRIM2013() {
