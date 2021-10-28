@@ -15,7 +15,13 @@ alias enterO2Alpide="alienv enter O2/latest-ALPIDE-IBA-o2"
 
 # in case of using alidocklite (docker) for O2:
 
-alias alidocklite="./home/marcosderos/alice/alidocklite/alidocklite"
+alidocklite () {
+
+cd /home/marcosderos/alice/alidocklite
+./alidocklite
+
+}
+
 
 # SRIM
 
