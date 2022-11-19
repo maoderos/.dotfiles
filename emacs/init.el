@@ -33,7 +33,9 @@
  ;; If there is more than one, they won't work right.
  '(company-clang-arguments '("-std=c++11"))
  '(package-selected-packages
-   '(cpputils-cmake ## company-irony company jedi-core cmake-mode)))
+   '(treemacs cpputils-cmake ## company-irony company jedi-core cmake-mode))
+ '(safe-local-variable-values
+   '((company-clang-arguments "-I/home/deros/Desktop/sandiaFactory/include/"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -41,8 +43,15 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; enable company 
+;; Enable company
+(require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
+
+;; Use company with clang
+(require 'cc-mode)
+(setq company-backends (delete 'company-semantic company-backends))
+(define-key c-mode-map  [(tab)] 'company-complete)
+(define-key c++-mode-map  [(tab)] 'company-complete)
 
 ;; enable jedi complete'
 (defun my/python-mode-hook ()
@@ -50,21 +59,6 @@
 
 (add-hook 'python-mode-hook 'my/python-mode-hook)
 
-;; Irony settings
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-
-(setq company-clang-arguments
-      (mapcar (lambda (item)(concat "-I" item))
-              (split-string
-               "
- /usr/include/c++/11
- /usr/include/c++/11/x86_64-linux-gnu/.
- /usr/include/c++/11/backward
- /usr/lib/gcc/x86_64-linux-gnu/11/include
- /usr/local/include
- /usr/lib/gcc/x86_64-linux-gnu/11/include-fixed
- /usr/include/x86_64-linux-gnu
- /usr/include
-"
-               )))
+;; treemacs
+(with-eval-after-load 'treemacs
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
