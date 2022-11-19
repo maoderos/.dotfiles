@@ -43,7 +43,7 @@ call plug#begin()
     Plug 'preservim/nerdtree'
 
     " Completion / linters / formatters
-    "Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install'}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'plasticboy/vim-markdown'
 
     " Git
@@ -52,3 +52,14 @@ call plug#end()
 
 "Set colorscheme
 colorscheme monokai
+" Setting for coc vim
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
