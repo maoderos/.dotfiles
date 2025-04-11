@@ -1,17 +1,15 @@
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-;; load monokai theme 
-(load-theme 'monokai t)
+;; -*- mode: elisp -*-
 
-;; no startup message
-(setq inhibit-startup-message t)
+;; enable tab mode
+(tab-bar-mode 1)
+
+;; standard indent is 4 spaces
+(setq standard-indent 4)
 
 ;; show line and column numbers
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 ;; Highlight parenthesis
 (show-paren-mode 1)
-
-;; standard indent is 4 spaces
-(setq standard-indent 4)
 
 ;; Matching parenthesis
 (show-paren-mode 1)
@@ -20,22 +18,50 @@
 ;; default *.py to python-mode
 (add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
 
-(require 'package)
-(add-to-list 'package-archives '("melpa-stable" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize)
+;; Disable the splash screen (to enable it agin, replace the t with 0)
+(setq inhibit-splash-screen t)
+
+;; Enable transient mark mode
+(transient-mark-mode 1)
+
+;;;;Org mode configuration
+;; Enable Org mode
+(require 'org)
+;; Make Org mode work with files ending in .org
+;; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+;; The above is the default in recent emacsen
+
+;; Set org agenda files
+(setq org-agenda-files (directory-files-recursively "~/Documents/org" "\\.org$"))
+
+;; set key C-ca for agenda
+(global-set-key "\C-ca" 'org-agenda)
+
+;; Set todo keywords in org mode
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "REVIEW" "DONE")))
+;; Set tags
+(setq org-tag-alist '(("semantiva" . ?w) ("research" . ?h) ("misc" . ?m)))
+`
+
+;; Then do all the Org setup
+(with-eval-after-load 'org
+  (setq org-directory "~/Documents/org")
+  (setq org-default-notes-file "~/Documents/org/semantiva/notes.org"))
+
+(defun open-semantiva-notes ()
+  "Open the Semantiva notes.org file."
+  (interactive)
+  (find-file "~/Documents/org/semantiva/notes.org"))
+
+(global-set-key (kbd "C-c s") #'open-semantiva-notes)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-clang-arguments '("-std=c++11"))
- '(package-selected-packages
-   '(treemacs cpputils-cmake ## company-irony company jedi-core cmake-mode))
- '(safe-local-variable-values
-   '((company-clang-arguments "-I/home/deros/Desktop/sandiaFactory/include/"))))
+ '(org-agenda-files '("~/Documents/2.org")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -43,22 +69,11 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; Enable company
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
+;; Use aspell as backend
+(setq ispell-program-name "aspell")
 
-;; Use company with clang
-(require 'cc-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-(define-key c-mode-map  [(tab)] 'company-complete)
-(define-key c++-mode-map  [(tab)] 'company-complete)
-
-;; enable jedi complete'
-(defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
-
-(add-hook 'python-mode-hook 'my/python-mode-hook)
-
-;; treemacs
-(with-eval-after-load 'treemacs
-  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+;; Enable spell check in Org-mode (and text modes)
+(add-hook 'org-mode-hook #'flyspell-mode)
+(add-hook 'text-mode-hook #'flyspell-mode)
+;; Enable identation mode
+(add-hook 'org-mode-hook #'org-indent-mode)
