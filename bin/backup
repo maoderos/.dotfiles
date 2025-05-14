@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source ~/.config/borg/backup.env
+# Set repo and archive name
+REPO="backup_remote:backups"
+ARCHIVE="backup-$(date +%Y-%m-%d_%H-%M)"
+
+# List of folders to back up
+FOLDERS="$HOME/Documents $HOME/Desktop $HOME/Pictures $HOME/.ssh/config $HOME/.config/nvim $HOME/.emacs.d $HOME/.bashrc"
+
+# Run borg backup
+borg create --progress --stats "$REPO::$ARCHIVE" $FOLDERS
