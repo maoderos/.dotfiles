@@ -10,3 +10,11 @@ FOLDERS="$HOME/Documents $HOME/Desktop $HOME/Pictures $HOME/.ssh/config $HOME/.c
 
 # Run borg backup
 borg create --progress --stats "$REPO::$ARCHIVE" $FOLDERS
+
+# Prune old backup
+borg prune "$BORG_REPO" \
+  --keep-daily=7 \
+  --keep-weekly=4 \
+  --keep-monthly=6 \
+  --stats
+
