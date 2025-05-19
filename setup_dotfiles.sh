@@ -6,7 +6,7 @@ if ! command -v stow >/dev/null 2>&1; then
   exit 1
 fi
 
-configs=("doom_emacs emacs nvim tmux vim ssh")
+configs=("doom_emacs emacs nvim tmux vim ssh bash")
 
 # Stow selected packages
 for config in "${configs[@]}"; do
